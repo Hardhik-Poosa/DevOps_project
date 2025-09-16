@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { registerUser } from '../services/auth';
+import { registerUser, loginUser } from '../services/auth';
 
 export interface User {
   id: string;
@@ -68,28 +68,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      // Mock authentication - replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const data = await loginUser({ email, password });
       
-      const mockUser: User = {
-        id: '1',
-        email,
-        name: email.split('@')[0],
-        role: email.includes('admin') ? 'admin' : 'customer',
-        avatar: `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=6d28d9&color=fff`,
-      };
-
-      const mockToken = 'mock-jwt-token';
-      
-      localStorage.setItem('authToken', mockToken);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      
-      setState({
-        user: mockUser,
-        isLoading: false,
-        isAuthenticated: true,
-      });
+      if (data.token && data.user) {
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        setState({
+          user: data.user,
+          isLoading: false,
+          isAuthenticated: true,
+        });
+      } else {
+        throw new Error('Login failed: Invalid response from server');
+      }
     } catch (error) {
+      console.error(error);
       throw new Error('Login failed');
     }
   };

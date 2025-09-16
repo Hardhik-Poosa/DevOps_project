@@ -1,9 +1,10 @@
 const express = require("express");
 const { getProducts, addProduct } = require("../controllers/productController.js");
+const { protect, admin } = require("../middleware/authMiddleware.js");
 
 const router = express.Router();
 
 router.get("/", getProducts);
-router.post("/", addProduct);
+router.post("/", protect, admin, addProduct);
 
 module.exports = router;
