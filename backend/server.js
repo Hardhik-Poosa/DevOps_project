@@ -12,6 +12,7 @@ app.use(express.json());
 // Enable CORS
 app.use(cors());
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/products', require('./routes/productRoutes'));
 // Connect to MongoDB
 connectDB();
 
