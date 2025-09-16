@@ -1,0 +1,130 @@
+[
+  {
+    "name": "Premium Wireless Headphones",
+    "price": 299.99,
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop",
+    "description": "High-quality wireless headphones with noise cancellation and premium sound quality.",
+    "category": "Electronics",
+    "stock": 25
+  },
+  {
+    "name": "Smart Fitness Watch",
+    "price": 199.99,
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop",
+    "description": "Advanced fitness tracking with heart rate monitoring and GPS functionality.",
+    "category": "Electronics",
+    "stock": 15
+  },
+  {
+    "name": "Organic Cotton T-Shirt",
+    "price": 29.99,
+    "image": "https://images.unsplash.com/photo-1588783269354-e2152eb659dd?w=800&auto=format&fit=crop",
+    "description": "Comfortable, sustainable t-shirt made from 100% organic cotton.",
+    "category": "Clothing",
+    "stock": 50
+  },
+  {
+    "name": "Professional Camera Lens",
+    "price": 799.99,
+    "image": "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop",
+    "description": "Professional grade 85mm portrait lens with exceptional image quality.",
+    "category": "Electronics",
+    "stock": 8
+  },
+  {
+    "name": "Minimalist Desk Lamp",
+    "price": 89.99,
+    "image": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
+    "description": "Modern LED desk lamp with adjustable brightness and color temperature.",
+    "category": "Home & Garden",
+    "stock": 30
+  },
+  {
+    "name": "Leather Messenger Bag",
+    "price": 149.99,
+    "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
+    "description": "Handcrafted leather messenger bag perfect for work and travel.",
+    "category": "Accessories",
+    "stock": 20
+  },
+  {
+    "name": "Wireless Charging Pad",
+    "price": 39.99,
+    "image": "https://images.unsplash.com/photo-1609081219090-a6d81d3085bf?w=400&h=300&fit=crop",
+    "description": "Fast wireless charging pad compatible with all Qi-enabled devices.",
+    "category": "Electronics",
+    "stock": 40
+  },
+  {
+    "name": "Artisan Coffee Beans",
+    "price": 24.99,
+    "image": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&h=300&fit=crop",
+    "description": "Premium single-origin coffee beans roasted to perfection.",
+    "category": "Food & Beverage",
+    "stock": 100
+  },
+  {
+    "name": "Bamboo Cutting Board Set",
+    "price": 49.99,
+    "image": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop",
+    "description": "Eco-friendly bamboo cutting board set with three different sizes.",
+    "category": "Home & Garden",
+    "stock": 35
+  },
+  {
+    "name": "Bluetooth Speaker",
+    "price": 79.99,
+    "image": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=300&fit=crop",
+    "description": "Portable Bluetooth speaker with 360-degree sound and waterproof design.",
+    "category": "Electronics",
+    "stock": 60
+  },
+  {
+    "name": "Yoga Mat Premium",
+    "price": 59.99,
+    "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop",
+    "description": "Non-slip premium yoga mat with extra cushioning for comfort.",
+    "category": "Sports & Fitness",
+    "stock": 45
+  },
+  {
+    "name": "Stainless Steel Water Bottle",
+    "price": 34.99,
+    "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=300&fit=crop",
+    "description": "Insulated stainless steel water bottle that keeps drinks cold for 24 hours.",
+    "category": "Sports & Fitness",
+    "stock": 80
+  },
+  {
+    "name": "Electric Kettle",
+    "price": 49.99,
+    "image": "https://media.istockphoto.com/id/1727256181/photo/glass-teapot-with-handle-and-leaf-filter-to-put-hot-water-into-dried-leaf-black-tea-for.webp?a=1&s=612x612&w=0&k=20&c=ywa2vX_FMbLhWfR3vT5twTWbu-hdywAmQFmibxZpz2E=",
+    "description": "Fast boiling electric kettle with auto shut-off feature.",
+    "category": "Home & Garden",
+    "stock": 25
+  },
+  {
+    "name": "Gaming Mouse",
+    "price": 59.99,
+    "image": "https://images.unsplash.com/photo-1613141412501-9012977f1969?w=800&auto=format&fit=crop",
+    "description": "Ergonomic gaming mouse with customizable buttons and RGB lighting.",
+    "category": "Electronics",
+    "stock": 35
+  },
+  {
+    "name": "Running Shoes",
+    "price": 89.99,
+    "image": "https://images.unsplash.com/photo-1562183241-b937e95585b6?q=80&w=930&auto=format&fit=crop",
+    "description": "Lightweight running shoes designed for comfort and performance.",
+    "category": "Clothing",
+    "stock": 40
+  },
+  {
+    "name": "Wireless Earbuds",
+    "price": 129.99,
+    "image": "https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=400&h=300&fit=crop",
+    "description": "Compact wireless earbuds with high-quality sound and long battery life.",
+    "category": "Electronics",
+    "stock": 50
+  }
+]

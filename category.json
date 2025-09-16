@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Electronics",
+    "description": "Devices and gadgets including audio, video, and computing equipment.",
+    "image": "https://images.unsplash.com/photo-1510552776732-03e61cf4b144?w=400&h=300&fit=crop",
+    "slug": "electronics"
+  },
+  {
+    "name": "Clothing",
+    "description": "Apparel and garments for men, women, and children.",
+    "image": "https://images.unsplash.com/photo-1521334884684-d80222895322?w=400&h=300&fit=crop",
+    "slug": "clothing"
+  },
+  {
+    "name": "Home & Garden",
+    "description": "Furniture, decor, and gardening supplies for your home.",
+    "image": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400&h=300&fit=crop",
+    "slug": "home-garden"
+  },
+  {
+    "name": "Accessories",
+    "description": "Fashion accessories including bags, belts, and jewelry.",
+    "image": "https://images.unsplash.com/photo-1503602642458-232111445657?w=400&h=300&fit=crop",
+    "slug": "accessories"
+  },
+  {
+    "name": "Food & Beverage",
+    "description": "Gourmet foods, beverages, and specialty items.",
+    "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop",
+    "slug": "food-beverage"
+  },
+  {
+    "name": "Sports & Fitness",
+    "description": "Equipment and apparel for sports and fitness activities.",
+    "image": "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&h=300&fit=crop",
+    "slug": "sports-fitness"
+  }
+]
