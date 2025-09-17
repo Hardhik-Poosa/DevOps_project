@@ -69,13 +69,19 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy to Minikube') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh 'kubectl apply -f k8s/'
-                    } else {
-                        bat 'kubectl apply -f k8s/'
+                withCredentials([file(credentialsId: 'minikube-kubeconfig', variable: 'KUBECONFIG')]) {
+                    script {
+                        if (isUnix()) {
+                            sh 'kubectl config current-context'
+                            sh 'kubectl get nodes'
+                            sh 'kubectl apply -f k8s/'
+                        } else {
+                            bat 'kubectl config current-context'
+                            bat 'kubectl get nodes'
+                            bat 'kubectl apply -f k8s/'
+                        }
                     }
                 }
             }
