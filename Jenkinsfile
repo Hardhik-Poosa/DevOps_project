@@ -9,45 +9,83 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Hardhik-Poosa/DevOps_project.git'
+                // ✅ Added credentialsId (works even if repo becomes private)
+                git branch: 'main',
+                    url: 'https://github.com/Hardhik-Poosa/DevOps_project.git',
+                    credentialsId: 'dockerhub-cred'
             }
         }
 
         stage('Run Backend Tests') {
             steps {
                 dir('backend') {
-                    sh 'npm install'
-                    sh 'npm test'    // Or pytest for Python
+                    // ✅ Use bat on Windows Jenkins, sh on Linux
+                    script {
+                        if (isUnix()) {
+                            sh 'npm install'
+                            sh 'npm test'
+                        } else {
+                            bat 'npm install'
+                            bat 'npm test'
+                        }
+                    }
                 }
-            }   
+            }
         }
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker-compose build'
+                script {
+                    if (isUnix()) {
+                        sh 'docker-compose build'
+                    } else {
+                        bat 'docker-compose build'
+                    }
+                }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    sh "docker tag backend:latest $DOCKER_BACKEND_IMAGE:latest"
-                    sh "docker tag frontend:latest $DOCKER_FRONTEND_IMAGE:latest"
-                    sh "docker push $DOCKER_BACKEND_IMAGE:latest"
-                    sh "docker push $DOCKER_FRONTEND_IMAGE:latest"
+                    script {
+                        if (isUnix()) {
+                            sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                            sh "docker tag backend:latest $DOCKER_BACKEND_IMAGE:latest"
+                            sh "docker tag frontend:latest $DOCKER_FRONTEND_IMAGE:latest"
+                            sh "docker push $DOCKER_BACKEND_IMAGE:latest"
+                            sh "docker push $DOCKER_FRONTEND_IMAGE:latest"
+                        } else {
+                            bat """echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"""
+                            bat "docker tag backend:latest %DOCKER_BACKEND_IMAGE%:latest"
+                            bat "docker tag frontend:latest %DOCKER_FRONTEND_IMAGE%:latest"
+                            bat "docker push %DOCKER_BACKEND_IMAGE%:latest"
+                            bat "docker push %DOCKER_FRONTEND_IMAGE%:latest"
+                        }
+                    }
                 }
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f k8s/' // Make sure you have your k8s deployment YAMLs in a folder
+                script {
+                    if (isUnix()) {
+                        sh 'kubectl apply -f k8s/'
+                    } else {
+                        bat 'kubectl apply -f k8s\\'
+                    }
+                }
             }
         }
     }
+
     post {
-        success { echo "Pipeline succeeded" }
-        failure { echo "Pipeline failed — check Console Output" }
+        success {
+            echo "✅ Pipeline succeeded"
+        }
+        failure {
+            echo "❌ Pipeline failed — check Console Output"
+        }
     }
 }
