@@ -2,13 +2,14 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "hardhikpoosa/myapp"  // change to your Docker Hub repo name
+        DOCKER_BACKEND_IMAGE = "hardhikpoosa/devops-backend"
+        DOCKER_FRONTEND_IMAGE = "hardhikpoosa/devops-frontend"
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/<your-repo>.git'
+                git branch: 'main', url: 'https://github.com/Hardhik-Poosa/DevOps_project.git'
             }
         }
 
@@ -18,7 +19,7 @@ pipeline {
                     sh 'npm install'
                     sh 'npm test'    // Or pytest for Python
                 }
-            }
+            }   
         }
 
         stage('Build Docker Images') {
@@ -31,10 +32,10 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    sh "docker tag backend:latest $DOCKER_IMAGE-backend:latest"
-                    sh "docker tag frontend:latest $DOCKER_IMAGE-frontend:latest"
-                    sh "docker push $DOCKER_IMAGE-backend:latest"
-                    sh "docker push $DOCKER_IMAGE-frontend:latest"
+                    sh "docker tag backend:latest $DOCKER_BACKEND_IMAGE:latest"
+                    sh "docker tag frontend:latest $DOCKER_FRONTEND_IMAGE:latest"
+                    sh "docker push $DOCKER_BACKEND_IMAGE:latest"
+                    sh "docker push $DOCKER_FRONTEND_IMAGE:latest"
                 }
             }
         }
@@ -44,5 +45,9 @@ pipeline {
                 sh 'kubectl apply -f k8s/' // Make sure you have your k8s deployment YAMLs in a folder
             }
         }
+    }
+    post {
+        success { echo "Pipeline succeeded" }
+        failure { echo "Pipeline failed — check Console Output" }
     }
 }
