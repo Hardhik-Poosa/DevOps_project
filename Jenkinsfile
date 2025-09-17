@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                // ✅ Added credentialsId (works even if repo becomes private)
+                // ✅ Works even if repo becomes private
                 git branch: 'main',
                     url: 'https://github.com/Hardhik-Poosa/DevOps_project.git',
                     credentialsId: 'dockerhub-cred'
@@ -59,7 +59,7 @@ pipeline {
                             sh "docker push $DOCKER_BACKEND_IMAGE:latest"
                             sh "docker push $DOCKER_FRONTEND_IMAGE:latest"
                         } else {
-                            bat """echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"""
+                            bat "cmd /c echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"
                             bat "docker tag backend:latest %DOCKER_BACKEND_IMAGE%:latest"
                             bat "docker tag frontend:latest %DOCKER_FRONTEND_IMAGE%:latest"
                             bat "docker push %DOCKER_BACKEND_IMAGE%:latest"
@@ -76,7 +76,8 @@ pipeline {
                     if (isUnix()) {
                         sh 'kubectl apply -f k8s/'
                     } else {
-                        bat 'kubectl apply -f k8s\'
+                        // ✅ Use forward slash for Windows
+                        bat 'kubectl apply -f k8s/'
                     }
                 }
             }
