@@ -9,7 +9,6 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                // ✅ Works even if repo becomes private
                 git branch: 'main',
                     url: 'https://github.com/Hardhik-Poosa/DevOps_project.git',
                     credentialsId: 'dockerhub-cred'
@@ -40,9 +39,9 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh 'docker-compose build'
+                        sh "docker-compose build"
                     } else {
-                        bat 'docker-compose build'
+                        bat "docker-compose build"
                     }
                 }
             }
@@ -54,7 +53,6 @@ pipeline {
                     script {
                         if (isUnix()) {
                             sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                            // ✅ Use the names Docker Compose actually built
                             sh "docker tag myapp-ci-backend:latest $DOCKER_BACKEND_IMAGE:latest"
                             sh "docker tag myapp-ci-frontend:latest $DOCKER_FRONTEND_IMAGE:latest"
                             sh "docker push $DOCKER_BACKEND_IMAGE:latest"
