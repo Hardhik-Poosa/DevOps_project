@@ -54,14 +54,15 @@ pipeline {
                     script {
                         if (isUnix()) {
                             sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                            sh "docker tag backend:latest $DOCKER_BACKEND_IMAGE:latest"
-                            sh "docker tag frontend:latest $DOCKER_FRONTEND_IMAGE:latest"
+                            // ✅ Use the names Docker Compose actually built
+                            sh "docker tag myapp-ci-backend:latest $DOCKER_BACKEND_IMAGE:latest"
+                            sh "docker tag myapp-ci-frontend:latest $DOCKER_FRONTEND_IMAGE:latest"
                             sh "docker push $DOCKER_BACKEND_IMAGE:latest"
                             sh "docker push $DOCKER_FRONTEND_IMAGE:latest"
                         } else {
                             bat "cmd /c echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"
-                            bat "docker tag backend:latest %DOCKER_BACKEND_IMAGE%:latest"
-                            bat "docker tag frontend:latest %DOCKER_FRONTEND_IMAGE%:latest"
+                            bat "docker tag myapp-ci-backend:latest %DOCKER_BACKEND_IMAGE%:latest"
+                            bat "docker tag myapp-ci-frontend:latest %DOCKER_FRONTEND_IMAGE%:latest"
                             bat "docker push %DOCKER_BACKEND_IMAGE%:latest"
                             bat "docker push %DOCKER_FRONTEND_IMAGE%:latest"
                         }
@@ -76,7 +77,6 @@ pipeline {
                     if (isUnix()) {
                         sh 'kubectl apply -f k8s/'
                     } else {
-                        // ✅ Use forward slash for Windows
                         bat 'kubectl apply -f k8s/'
                     }
                 }
