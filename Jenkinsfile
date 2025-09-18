@@ -77,11 +77,13 @@ pipeline {
                     script {
                         // Use the relative path to the k8s manifests directory
                         if (isUnix()) {
-                            sh 'kubectl config current-context'
+                            sh 'echo "Using kubeconfig at $KUBECONFIG"'
+                            sh 'kubectl config get-contexts'
                             sh 'kubectl get nodes'
                             sh 'kubectl apply -f k8s/'
                         } else {
-                            bat 'kubectl config current-context'
+                            bat 'echo Using kubeconfig at %KUBECONFIG%'
+                            bat 'kubectl config get-contexts'
                             bat 'kubectl get nodes'
                             bat 'kubectl apply -f k8s/'
                         }
