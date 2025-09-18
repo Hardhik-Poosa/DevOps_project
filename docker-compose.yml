@@ -10,7 +10,7 @@ services:
     networks:
       - devops-network
 
-    backend:
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile.backend
