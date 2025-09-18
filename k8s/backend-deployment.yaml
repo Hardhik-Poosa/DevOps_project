@@ -26,8 +26,7 @@ spec:
               value: yourjwtsecret
             - name: MONGO_URI
               value: mongodb://mongo:27017/devops
-          image: devops-backend:latest
-          imagePullPolicy: Never
+          image: hardhikpoosa/devops-backend:latest
           name: backend
           ports:
             - containerPort: 5000
