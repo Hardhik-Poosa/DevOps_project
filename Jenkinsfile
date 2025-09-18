@@ -39,9 +39,14 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh "docker-compose build"
+                        // Build backend normally
+                        sh "docker build -t myapp-ci-backend:latest ./backend"
+
+                        // Build frontend from VM/cloud path
+                        sh "docker build -t myapp-ci-frontend:latest /home/ubuntu/e-commerce-website/frontend"
                     } else {
-                        bat "docker-compose build"
+                        bat "docker build -t myapp-ci-backend:latest .\\backend"
+                        bat "docker build -t myapp-ci-frontend:latest C:\\Users\\KISHORE\\e-commerce-website\\frontend"
                     }
                 }
             }
@@ -76,11 +81,11 @@ pipeline {
                         if (isUnix()) {
                             sh 'kubectl config current-context'
                             sh 'kubectl get nodes'
-                            sh 'kubectl apply -f k8s/'
+                            sh 'kubectl apply -f /home/ubuntu/e-commerce-website/k8s/'  // VM path for k8s YAMLs
                         } else {
                             bat 'kubectl config current-context'
                             bat 'kubectl get nodes'
-                            bat 'kubectl apply -f k8s/'
+                            bat 'kubectl apply -f C:\\Users\\KISHORE\\e-commerce-website\\k8s\\'
                         }
                     }
                 }
