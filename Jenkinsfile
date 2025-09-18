@@ -38,15 +38,11 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
+                    // Use docker-compose to build images based on the docker-compose.yml file
                     if (isUnix()) {
-                        // Build backend normally
-                        sh "docker build -t myapp-ci-backend:latest ./backend"
-
-                        // Build frontend from VM/cloud path
-                        sh "docker build -t myapp-ci-frontend:latest /home/ubuntu/e-commerce-website/frontend"
+                        sh "docker-compose build"
                     } else {
-                        bat "docker build -t myapp-ci-backend:latest .\\backend"
-                        bat "docker build -t myapp-ci-frontend:latest C:\\Users\\KISHORE\\e-commerce-website\\frontend"
+                        bat "docker-compose build"
                     }
                 }
             }
@@ -58,6 +54,7 @@ pipeline {
                     script {
                         if (isUnix()) {
                             sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                            // Tag images using the service names from docker-compose.yml (myapp-ci-backend, myapp-ci-frontend)
                             sh "docker tag myapp-ci-backend:latest $DOCKER_BACKEND_IMAGE:latest"
                             sh "docker tag myapp-ci-frontend:latest $DOCKER_FRONTEND_IMAGE:latest"
                             sh "docker push $DOCKER_BACKEND_IMAGE:latest"
@@ -78,14 +75,15 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'minikube-kubeconfig', variable: 'KUBECONFIG')]) {
                     script {
+                        // Use the relative path to the k8s manifests directory
                         if (isUnix()) {
                             sh 'kubectl config current-context'
                             sh 'kubectl get nodes'
-                            sh 'kubectl apply -f /home/ubuntu/e-commerce-website/k8s/'  // VM path for k8s YAMLs
+                            sh 'kubectl apply -f k8s/'
                         } else {
                             bat 'kubectl config current-context'
                             bat 'kubectl get nodes'
-                            bat 'kubectl apply -f C:\\Users\\KISHORE\\e-commerce-website\\k8s\\'
+                            bat 'kubectl apply -f k8s/'
                         }
                     }
                 }
