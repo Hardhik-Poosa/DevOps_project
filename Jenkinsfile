@@ -15,6 +15,18 @@ pipeline {
             }
         }
 
+        stage('Test Hello') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'cat hello.txt'
+                    } else {
+                        bat 'type hello.txt'
+                    }
+                }
+            }
+        }
+
         stage('Run Backend Tests') {
             steps {
                 dir('backend') {
