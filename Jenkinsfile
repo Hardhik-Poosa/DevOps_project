@@ -50,7 +50,6 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    // Use docker-compose to build images based on the docker-compose.yml file
                     if (isUnix()) {
                         sh "docker-compose build"
                     } else {
@@ -66,7 +65,6 @@ pipeline {
                     script {
                         if (isUnix()) {
                             sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                            // Tag images using the service names from docker-compose.yml (myapp-ci-backend, myapp-ci-frontend)
                             sh "docker tag myapp-ci-backend:latest $DOCKER_BACKEND_IMAGE:latest"
                             sh "docker tag myapp-ci-frontend:latest $DOCKER_FRONTEND_IMAGE:latest"
                             sh "docker push $DOCKER_BACKEND_IMAGE:latest"
@@ -87,13 +85,16 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'minikube-kubeconfig', variable: 'KUBECONFIG')]) {
                     script {
-                        // Use the relative path to the k8s manifests directory
                         if (isUnix()) {
+                            sh 'minikube start || true'
+                            sh 'minikube update-context'
                             sh 'echo "Using kubeconfig at $KUBECONFIG"'
                             sh 'kubectl config get-contexts'
                             sh 'kubectl get nodes'
                             sh 'kubectl apply -f k8s/'
                         } else {
+                            bat 'minikube start || exit 0'
+                            bat 'minikube update-context'
                             bat 'echo Using kubeconfig at %KUBECONFIG%'
                             bat 'kubectl config get-contexts'
                             bat 'kubectl get nodes'
@@ -107,10 +108,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Pipeline succeeded"
+            echo " Pipeline succeeded"
         }
         failure {
-            echo "❌ Pipeline failed — check Console Output"
+            echo " Pipeline failed — check Console Output"
         }
     }
 }
