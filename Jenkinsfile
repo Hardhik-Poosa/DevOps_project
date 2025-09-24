@@ -47,6 +47,24 @@ pipeline {
             }
         }
 
+        stage('Run E2E Tests') {
+            steps {
+                script {
+                    try {
+                        if (isUnix()) {
+                            sh 'npm install'
+                            sh 'npm run cypress:run'
+                        } else {
+                            bat 'npm install'
+                            bat 'npm run cypress:run'
+                        }
+                    } catch (err) {
+                        echo "Tests failed, but continuing pipeline..."
+                    }
+                }
+            }
+        }
+
         stage('Build Docker Images') {
             steps {
                 script {
