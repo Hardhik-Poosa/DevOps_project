@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard, Lock, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -38,6 +38,17 @@ const Checkout = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to proceed with the checkout.",
+        variant: "destructive",
+      });
+      navigate('/login');
+    }
+  }, [user, navigate, toast]);
 
   const handleShippingChange = (field: string, value: string) => {
     setShippingInfo(prev => ({ ...prev, [field]: value }));
