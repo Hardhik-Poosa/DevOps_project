@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "mocha",
+    "test": "cd backend && npm test",
     "cypress:open": "cypress open",
     "cy:run-wait": "wait-on http://localhost:6790 && cypress run",
     "cypress:run": "npm-run-all --race --parallel dev cy:run-wait"
