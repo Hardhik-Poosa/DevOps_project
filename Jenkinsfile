@@ -139,6 +139,8 @@ pipeline {
                     try {
                         if (isUnix()) {
                             sh "docker-compose up -d"
+                            sh "echo 'Waiting for application to start... (15s)'"
+                            sh "sleep 15"
                             sh '''
                                 docker run --rm --network=myapp-ci_devops-network \
                                 -v ${WORKSPACE}:/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py \
@@ -146,6 +148,8 @@ pipeline {
                             '''
                         } else {
                             bat "docker-compose up -d"
+                            bat "echo 'Waiting for application to start... (15s)'"
+                            bat "timeout /t 15 /nobreak"
                             bat '''
                                 docker run --rm --network=myapp-ci_devops-network ^
                                 -v "%WORKSPACE%:/zap/wrk/:rw" zaproxy/zap-stable zap-baseline.py ^
