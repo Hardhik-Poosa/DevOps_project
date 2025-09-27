@@ -141,14 +141,14 @@ pipeline {
                             sh "docker-compose up -d"
                             sh '''
                                 docker run --rm --network=myapp-ci_devops-network \
-                                -v ${WORKSPACE}:/zap/wrk/:rw softwaresecurityproject/zap-stable zap-baseline.py \
+                                -v ${WORKSPACE}:/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py \
                                 -t http://frontend:80 -r report.html
                             '''
                         } else {
                             bat "docker-compose up -d"
                             bat '''
                                 docker run --rm --network=myapp-ci_devops-network ^
-                                -v "%WORKSPACE%:/zap/wrk/:rw" softwaresecurityproject/zap-stable zap-baseline.py ^
+                                -v "%WORKSPACE%:/zap/wrk/:rw" zaproxy/zap-stable zap-baseline.py ^
                                 -t http://frontend:80 -r report.html
                             '''
                         }
