@@ -147,9 +147,9 @@ pipeline {
                             sh "docker-compose logs frontend"
                             sh "echo '--- End of diagnostics ---'"
                             sh '''
-                                docker run --rm --network=myapp-ci_devops-network \
+                                docker run --rm \
                                 -v ${WORKSPACE}:/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py \
-                                -t http://frontend:80 -r report.html
+                                -t http://host.docker.internal:3000 -r report.html
                             '''
                         } else {
                             bat "docker-compose up -d"
