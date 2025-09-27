@@ -161,9 +161,9 @@ pipeline {
                             bat "docker-compose logs frontend"
                             bat "echo --- End of diagnostics ---"
                             bat '''
-                                docker run --rm --network=myapp-ci_devops-network ^
+                                docker run --rm ^
                                 -v "%WORKSPACE%:/zap/wrk/:rw" zaproxy/zap-stable zap-baseline.py ^
-                                -t http://frontend:80 -r report.html
+                                -t http://host.docker.internal:3000 -r report.html
                             '''
                         }
                     } finally {
