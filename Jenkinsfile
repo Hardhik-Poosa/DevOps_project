@@ -18,14 +18,13 @@ pipeline {
         stage('Security Scans') {
             parallel {
                 stage('SAST (Semgrep)') {
-                    agent {
-                        // Using a docker agent is cleaner and avoids polluting the host
-                        docker { image 'semgrep/semgrep' }
-                    }
                     steps {
                         script {
-                            // Scan with auto-selected rules, fail on any findings
-                            sh 'semgrep scan --config auto --error'
+                            if (isUnix()) {
+                                sh 'docker run --rm -v $WORKSPACE:/src semgrep/semgrep scan --config auto --error'
+                            } else {
+                                bat 'docker run --rm -v %WORKSPACE%:/src semgrep/semgrep scan --config auto --error'
+                            }
                         }
                     }
                 }
