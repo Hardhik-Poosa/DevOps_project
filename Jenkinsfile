@@ -15,6 +15,48 @@ pipeline {
             }
         }
 
+        stage('Security Scans') {
+            parallel {
+                stage('SAST (Semgrep)') {
+                    agent {
+                        // Using a docker agent is cleaner and avoids polluting the host
+                        docker { image 'semgrep/semgrep' }
+                    }
+                    steps {
+                        script {
+                            // Scan with auto-selected rules, fail on any findings
+                            sh 'semgrep scan --config auto --error'
+                        }
+                    }
+                }
+                stage('Dependency Scan (npm audit)') {
+                    steps {
+                        script {
+                            if (isUnix()) {
+                                // Install only production dependencies and fail on critical vulnerabilities
+                                sh 'npm install --omit=dev && npm audit --audit-level=critical'
+                            } else {
+                                bat 'npm install --omit=dev && npm audit --audit-level=critical'
+                            }
+                        }
+                    }
+                }
+                stage('Secrets Scan (Gitleaks)') {
+                    steps {
+                        script {
+                            if (isUnix()) {
+                                // We need dev dependencies for gitleaks-secret-scanner
+                                // This will fail the build if secrets are detected
+                                sh 'npm install && npx gitleaks-secret-scanner detect --source .'
+                            } else {
+                                bat 'npm install && npx gitleaks-secret-scanner detect --source .'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Test Hello') {
             steps {
                 script {

@@ -58,7 +58,7 @@ exports.loginUser = async (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     console.log("Received registration request with body:", req.body);
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // Check if user already exists
     const userExists = await User.findOne({ email });
@@ -76,6 +76,7 @@ exports.createUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      role: role || 'user',
     });
 
     await newUser.save();
@@ -84,6 +85,7 @@ exports.createUser = async (req, res) => {
       _id: newUser._id,
       name: newUser.name,
       email: newUser.email,
+      role: newUser.role,
     });
   } catch (error) {
     console.error("Error creating user:", error);

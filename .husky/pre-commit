@@ -1,0 +1,2 @@
+npx gitleaks-secret-scanner protect --staged
+npm test
