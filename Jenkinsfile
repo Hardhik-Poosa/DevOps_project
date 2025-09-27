@@ -139,11 +139,11 @@ pipeline {
                     try {
                         if (isUnix()) {
                             sh "docker-compose up -d"
-                            sh "echo 'Waiting for application to start... (15s)'"
-                            sh "sleep 15"
+                            sh "echo 'Waiting for application to start... (30s)'"
+                            sh "sleep 30"
                             sh "echo '--- Checking container status ---'"
                             sh "docker-compose ps"
-                            sh "echo '--- Frontend container logs ---'"
+                            sh "echo '--- IMPORTANT: Frontend container logs (check for errors) ---'"
                             sh "docker-compose logs frontend"
                             sh "echo '--- End of diagnostics ---'"
                             sh '''
@@ -153,11 +153,11 @@ pipeline {
                             '''
                         } else {
                             bat "docker-compose up -d"
-                            bat "echo 'Waiting for application to start... (15s)'"
-                            bat "ping -n 16 127.0.0.1 > nul"
+                            bat "echo 'Waiting for application to start... (30s)'"
+                            bat "ping -n 31 127.0.0.1 > nul"
                             bat "echo --- Checking container status ---"
                             bat "docker-compose ps"
-                            bat "echo --- Frontend container logs ---"
+                            bat "echo --- IMPORTANT: Frontend container logs (check for errors) ---"
                             bat "docker-compose logs frontend"
                             bat "echo --- End of diagnostics ---"
                             bat '''
