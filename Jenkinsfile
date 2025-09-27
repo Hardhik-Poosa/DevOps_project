@@ -133,6 +133,41 @@ pipeline {
             }
         }
 
+        stage('DAST (OWASP ZAP)') {
+            steps {
+                script {
+                    try {
+                        if (isUnix()) {
+                            sh "docker-compose up -d"
+                            sh '''
+                                docker run --rm --network=devopsproject-main_devops-network \
+                                -v ${WORKSPACE}:/zap/wrk/:rw owasp/zap2docker-stable zap-baseline.py \
+                                -t http://frontend:80 -r report.html
+                            '''
+                        } else {
+                            bat "docker-compose up -d"
+                            bat '''
+                                docker run --rm --network=devopsproject-main_devops-network ^
+                                -v "%WORKSPACE%:/zap/wrk/:rw" owasp/zap2docker-stable zap-baseline.py ^
+                                -t http://frontend:80 -r report.html
+                            '''
+                        }
+                    } finally {
+                        if (isUnix()) {
+                            sh "docker-compose down"
+                        } else {
+                            bat "docker-compose down"
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'report.html', allowEmptyArchive: true
+                }
+            }
+        }
+
         stage('Deploy to Minikube') {
             steps {
                 withCredentials([file(credentialsId: 'minikube-kubeconfig', variable: 'KUBECONFIG')]) {
