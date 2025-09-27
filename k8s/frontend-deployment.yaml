@@ -23,6 +23,9 @@ spec:
       containers:
         - image: hardhikpoosa/devops-frontend:latest
           name: frontend
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
           ports:
             - containerPort: 80
               protocol: TCP

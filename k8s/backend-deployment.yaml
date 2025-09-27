@@ -28,6 +28,9 @@ spec:
               value: mongodb://mongo:27017/devops
           image: hardhikpoosa/devops-backend:latest
           name: backend
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
           ports:
             - containerPort: 5000
               protocol: TCP

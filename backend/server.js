@@ -3,6 +3,8 @@ console.log('MONGO_URI from .env:', process.env.MONGO_URI);
 const express = require("express");
 const connectDB = require("./config/db");
 const cors = require("cors");
+const cookieParser = require('cookie-parser');
+const csrf = require('csurf');
 
 const app = express();
 
@@ -11,6 +13,16 @@ app.use(express.json());
 
 // Enable CORS
 app.use(cors());
+
+// CSRF Protection
+app.use(cookieParser());
+const csrfProtection = csrf({ cookie: true });
+app.use(csrfProtection);
+
+app.get('/api/csrf-token', (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
+
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 
