@@ -23,7 +23,7 @@ pipeline {
                             if (isUnix()) {
                                 sh 'docker run --rm -v $WORKSPACE:/src semgrep/semgrep scan --config auto --error'
                             } else {
-                                bat 'docker run --rm -v %WORKSPACE%:/src semgrep/semgrep scan --config auto --error'
+                                bat "docker run --rm -v %WORKSPACE%:/src semgrep/semgrep scan --config auto --error"
                             }
                         }
                     }
@@ -33,9 +33,9 @@ pipeline {
                         script {
                             if (isUnix()) {
                                 // Install only production dependencies and fail on critical vulnerabilities
-                                sh 'npm install --omit=dev && npm audit --audit-level=critical'
+                                sh 'npm install --omit=dev --no-scripts && npm audit --audit-level=critical'
                             } else {
-                                bat 'npm install --omit=dev && npm audit --audit-level=critical'
+                                bat 'npm install --omit=dev --no-scripts && npm audit --audit-level=critical'
                             }
                         }
                     }
@@ -46,9 +46,9 @@ pipeline {
                             if (isUnix()) {
                                 // We need dev dependencies for gitleaks-secret-scanner
                                 // This will fail the build if secrets are detected
-                                sh 'npm install && npx gitleaks-secret-scanner detect --source .'
+                                sh 'npm cache clean --force && npm install && npx gitleaks-secret-scanner detect --source .'
                             } else {
-                                bat 'npm install && npx gitleaks-secret-scanner detect --source .'
+                                bat 'npm cache clean --force && npm install && npx gitleaks-secret-scanner detect --source .'
                             }
                         }
                     }
