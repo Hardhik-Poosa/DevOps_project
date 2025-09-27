@@ -103,9 +103,9 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh "docker-compose build"
+                        sh "docker-compose build --no-cache"
                     } else {
-                        bat "docker-compose build"
+                        bat "docker-compose build --no-cache"
                     }
                 }
             }
@@ -138,11 +138,17 @@ pipeline {
                 withCredentials([file(credentialsId: 'minikube-kubeconfig', variable: 'KUBECONFIG')]) {
                     script {
                         if (isUnix()) {
-                            sh 'minikube start || true'
+                            sh 'minikube delete'
+                            sh 'minikube start'
                             sh 'kubectl apply -f k8s/'
+                            sh 'kubectl rollout restart deployment frontend'
+                            sh 'kubectl rollout restart deployment backend'
                         } else {
-                            bat 'minikube start || exit 0'
+                            bat 'minikube delete'
+                            bat 'minikube start'
                             bat 'kubectl apply -f k8s/'
+                            bat 'kubectl rollout restart deployment frontend'
+                            bat 'kubectl rollout restart deployment backend'
                         }
                     }
                 }
