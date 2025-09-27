@@ -141,6 +141,11 @@ pipeline {
                             sh "docker-compose up -d"
                             sh "echo 'Waiting for application to start... (15s)'"
                             sh "sleep 15"
+                            sh "echo '--- Checking container status ---'"
+                            sh "docker-compose ps"
+                            sh "echo '--- Frontend container logs ---'"
+                            sh "docker-compose logs frontend"
+                            sh "echo '--- End of diagnostics ---'"
                             sh '''
                                 docker run --rm --network=myapp-ci_devops-network \
                                 -v ${WORKSPACE}:/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py \
@@ -150,6 +155,11 @@ pipeline {
                             bat "docker-compose up -d"
                             bat "echo 'Waiting for application to start... (15s)'"
                             bat "ping -n 16 127.0.0.1 > nul"
+                            bat "echo --- Checking container status ---"
+                            bat "docker-compose ps"
+                            bat "echo --- Frontend container logs ---"
+                            bat "docker-compose logs frontend"
+                            bat "echo --- End of diagnostics ---"
                             bat '''
                                 docker run --rm --network=myapp-ci_devops-network ^
                                 -v "%WORKSPACE%:/zap/wrk/:rw" zaproxy/zap-stable zap-baseline.py ^
