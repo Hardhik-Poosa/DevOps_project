@@ -149,7 +149,7 @@ pipeline {
                         } else {
                             bat "docker-compose up -d"
                             bat "echo 'Waiting for application to start... (15s)'"
-                            bat "timeout /t 15 /nobreak"
+                            bat "ping -n 16 127.0.0.1 > nul"
                             bat '''
                                 docker run --rm --network=myapp-ci_devops-network ^
                                 -v "%WORKSPACE%:/zap/wrk/:rw" zaproxy/zap-stable zap-baseline.py ^
