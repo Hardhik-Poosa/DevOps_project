@@ -15,6 +15,18 @@ pipeline {
             }
         }
 
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'npm ci'
+                    } else {
+                        bat 'npm ci'
+                    }
+                }
+            }
+        }
+
         stage('Security Scans') {
             parallel {
                 stage('SAST (Semgrep)') {
@@ -32,9 +44,9 @@ pipeline {
                     steps {
                         script {
                             if (isUnix()) {
-                                sh 'npm install --omit=dev --ignore-scripts && npm audit --audit-level=critical'
+                                sh 'npm audit --audit-level=critical'
                             } else {
-                                bat "npm install --omit=dev --ignore-scripts && npm audit --audit-level=critical"
+                                bat 'npm audit --audit-level=critical'
                             }
                         }
                     }
@@ -43,9 +55,9 @@ pipeline {
                     steps {
                         script {
                             if (isUnix()) {
-                                sh 'npm ci && npx gitleaks-secret-scanner detect --source .'
+                                sh 'npx gitleaks-secret-scanner detect --source .'
                             } else {
-                                bat 'npm ci && npx gitleaks-secret-scanner detect --source .'
+                                bat 'npx gitleaks-secret-scanner detect --source .'
                             }
                         }
                     }
