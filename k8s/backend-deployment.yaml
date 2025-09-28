@@ -30,10 +30,12 @@ spec:
           name: backend
           securityContext:
             allowPrivilegeEscalation: false
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
+           
           ports:
             - containerPort: 5000
               protocol: TCP
+      securityContext:
+       runAsNonRoot: true
+       runAsUser: 1000
+       runAsGroup: 1000
       restartPolicy: Always
