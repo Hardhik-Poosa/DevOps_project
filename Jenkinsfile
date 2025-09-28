@@ -43,9 +43,9 @@ pipeline {
                     steps {
                         script {
                             if (isUnix()) {
-                                sh 'npm cache clean --force && npm install && npx gitleaks-secret-scanner detect --source .'
+                                sh 'npm ci && npx gitleaks-secret-scanner detect --source .'
                             } else {
-                                bat 'npm cache clean --force && npm install && npx gitleaks-secret-scanner detect --source .'
+                                bat 'npm ci && npx gitleaks-secret-scanner detect --source .'
                             }
                         }
                     }
