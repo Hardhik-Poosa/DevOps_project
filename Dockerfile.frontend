@@ -17,11 +17,12 @@ COPY --from=build /app/dist /usr/share/nginx/html
 RUN mkdir -p /run/nginx && \
     chown -R nginx:nginx /run/nginx && \
     mkdir -p /var/cache/nginx/client_temp && \
-    chown -R nginx:nginx /var/cache/nginx
+    chown -R nginx:nginx /var/cache/nginx && \
+    sed -i 's|/var/run/nginx.pid|/run/nginx/nginx.pid|' /etc/nginx/nginx.conf
 
 # The nginx user is included in the base image
 USER nginx
 
 EXPOSE 80
-# Start nginx with a writable pid path
-CMD ["nginx", "-g", "daemon off; pid /run/nginx/nginx.pid;"]
+# Start nginx in the foreground. Remove the duplicate 'pid' directive.
+CMD ["nginx", "-g", "daemon off;"]

@@ -20,13 +20,23 @@ spec:
       labels:
         io.kompose.service: frontend
     spec:
+      securityContext:
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
       containers:
         - image: hardhikpoosa/devops-frontend:latest
           name: frontend
+          imagePullPolicy: Never
           securityContext:
-            runAsNonRoot: true
             allowPrivilegeEscalation: false
           ports:
             - containerPort: 80
               protocol: TCP
+          volumeMounts:
+            - name: nginx-run
+              mountPath: /run
       restartPolicy: Always
+      volumes:
+        - name: nginx-run
+          emptyDir: {}

@@ -29,7 +29,6 @@ spec:
           image: hardhikpoosa/devops-backend:latest
           name: backend
           securityContext:
-            runAsNonRoot: true
             allowPrivilegeEscalation: false
           ports:
             - containerPort: 5000
