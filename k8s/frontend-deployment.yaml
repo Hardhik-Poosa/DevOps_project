@@ -30,6 +30,7 @@ spec:
           imagePullPolicy: Never
           securityContext:
             allowPrivilegeEscalation: false
+            runAsNonRoot: true
           ports:
             - containerPort: 80
               protocol: TCP
