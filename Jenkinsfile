@@ -161,7 +161,7 @@ pipeline {
                             sh '''
                                 docker run --rm \
                                 -v ${WORKSPACE}:/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py \
-                                -t http://host.docker.internal:3000 -r report.html
+                                -t http://host.docker.internal:3000 -c zap-baseline.conf -r report.html
                             '''
                         } else {
                             bat "docker-compose up -d"
@@ -175,7 +175,7 @@ pipeline {
                             bat '''
                                 docker run --rm ^
                                 -v "%WORKSPACE%:/zap/wrk/:rw" zaproxy/zap-stable zap-baseline.py ^
-                                -t http://host.docker.internal:3000 -r report.html
+                                -t http://host.docker.internal:3000 -c zap-baseline.conf -r report.html
                             '''
                         }
                     } finally {
