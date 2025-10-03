@@ -17,6 +17,7 @@ const Products = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [maxPrice, setMaxPrice] = useState(1000);
   const [sortBy, setSortBy] = useState('name');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -33,7 +34,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/products');
+        const response = await fetch('/api/products');
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
@@ -51,6 +52,13 @@ const Products = () => {
           reviews: 10, // Default reviews
         }));
         setProducts(mappedProducts);
+
+        if (mappedProducts.length > 0) {
+          const maxProductPrice = Math.ceil(Math.max(...mappedProducts.map(p => p.price), 1000));
+          setMaxPrice(maxProductPrice);
+          setPriceRange([0, maxProductPrice]);
+        }
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -59,7 +67,7 @@ const Products = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [location]);
 
   const filteredProducts = useMemo(() => {
     const filtered = products.filter(product => {
@@ -168,7 +176,7 @@ const Products = () => {
                 <Slider
                   value={priceRange}
                   onValueChange={setPriceRange}
-                  max={1000}
+                  max={maxPrice}
                   min={0}
                   step={10}
                   className="w-full"
@@ -229,7 +237,7 @@ const Products = () => {
             onClick={() => {
               setSearchQuery('');
               setSelectedCategory('All Categories');
-              setPriceRange([0, 1000]);
+              setPriceRange([0, maxPrice]);
             }}
           >
             Clear filters

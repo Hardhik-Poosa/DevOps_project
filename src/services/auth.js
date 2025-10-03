@@ -1,12 +1,25 @@
-const API_URL = 'http://localhost:5000/api/users';
+const API_URL = '/api/users';
+
+const getCsrfToken = async () => {
+  try {
+    const response = await fetch('/api/csrf-token');
+    const data = await response.json();
+    return data.csrfToken;
+  } catch (error) {
+    console.error('Failed to get CSRF token:', error);
+    return null;
+  }
+};
 
 export const registerUser = async (userData) => {
   try {
+    const csrfToken = await getCsrfToken();
     const response = await fetch(`${API_URL}`,
       {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'csrf-token': csrfToken,
       },
       body: JSON.stringify(userData),
     });
@@ -24,10 +37,12 @@ export const registerUser = async (userData) => {
 
 export const loginUser = async (credentials) => {
   try {
+    const csrfToken = await getCsrfToken();
     const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'csrf-token': csrfToken,
       },
       body: JSON.stringify(credentials),
     });

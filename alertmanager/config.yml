@@ -1,0 +1,6 @@
+route:
+  receiver: 'default-receiver'
+receivers:
+  - name: 'default-receiver'
+    webhook_configs:
+      - url: 'http://localhost:5001/'

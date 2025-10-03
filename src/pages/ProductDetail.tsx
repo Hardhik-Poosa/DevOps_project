@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Star, ShoppingCart, Heart, Minus, Plus, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,15 +7,42 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
-import { mockProducts } from '@/data/mockProducts';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCart();
   const { toast } = useToast();
 
-  const product = mockProducts.find(p => p.id === id);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`/api/products/${id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch product');
+        }
+        const data = await response.json();
+        setProduct(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  if (loading) {
+    return <div className="container mx-auto px-4 py-8 text-center">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="container mx-auto px-4 py-8 text-center">Error: {error}</div>;
+  }
 
   if (!product) {
     return (
@@ -38,7 +65,7 @@ const ProductDetail = () => {
     });
   };
 
-  const renderStars = (rating: number) => {
+  const renderStars = (rating = 0) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
@@ -191,7 +218,7 @@ const ProductDetail = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">SKU:</span>
-                  <span className="text-muted-foreground">PRD-{product.id}</span>
+                  <span className="text-muted-foreground">PRD-{product._id}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Weight:</span>

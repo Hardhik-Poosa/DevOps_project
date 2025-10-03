@@ -1,12 +1,12 @@
-version: '3.8'
-
 services:
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
     ports:
-      - '3000:8070'
+      - '8071:8070'
+    depends_on:
+      - backend
     networks:
       - devops-network
 
@@ -20,19 +20,43 @@ services:
       - MONGO_URI=mongodb://mongo:27017/devops
       - JWT_SECRET=yourjwtsecret
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     networks:
       - devops-network
 
   mongo:
     image: mongo:latest
-    read_only: true
     ports:
       - '27017:27017'
     volumes:
       - mongo-data:/data/db
     security_opt:
       - "no-new-privileges:true"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - devops-network
+  
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
+    networks:
+      - devops-network
+
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    ports:
+      - '9093:9093'
+    volumes:
+      - ./alertmanager/config.yml:/etc/alertmanager/config.yml
     networks:
       - devops-network
 

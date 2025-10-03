@@ -129,14 +129,14 @@ pipeline {
                     script {
                         if (isUnix()) {
                             sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                            sh "docker tag myapp-ci-backend:latest $DOCKER_BACKEND_IMAGE:latest"
-                            sh "docker tag myapp-ci-frontend:latest $DOCKER_FRONTEND_IMAGE:latest"
+                            sh "docker tag devopsproject-main-backend:latest $DOCKER_BACKEND_IMAGE:latest"
+                            sh "docker tag devopsproject-main-frontend:latest $DOCKER_FRONTEND_IMAGE:latest"
                             sh "docker push $DOCKER_BACKEND_IMAGE:latest"
                             sh "docker push $DOCKER_FRONTEND_IMAGE:latest"
                         } else {
                             bat "echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"
-                            bat "docker tag myapp-ci-backend:latest %DOCKER_BACKEND_IMAGE%:latest"
-                            bat "docker tag myapp-ci-frontend:latest %DOCKER_FRONTEND_IMAGE%:latest"
+                            bat "docker tag devopsproject-main-backend:latest %DOCKER_BACKEND_IMAGE%:latest"
+                            bat "docker tag devopsproject-main-frontend:latest %DOCKER_FRONTEND_IMAGE%:latest"
                             bat "docker push %DOCKER_BACKEND_IMAGE%:latest"
                             bat "docker push %DOCKER_FRONTEND_IMAGE%:latest"
                         }
@@ -161,7 +161,7 @@ pipeline {
                             sh '''
                                 docker run --rm \
                                 -v ${WORKSPACE}:/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py \
-                                -t http://host.docker.internal:3000 -c zap-baseline.conf -r report.html
+                                -t http://host.docker.internal:8071 -c zap-baseline.conf -r report.html
                             '''
                         } else {
                             bat "docker-compose up -d"
@@ -175,7 +175,7 @@ pipeline {
                             bat '''
                                 docker run --rm ^
                                 -v "%WORKSPACE%:/zap/wrk/:rw" zaproxy/zap-stable zap-baseline.py ^
-                                -t http://host.docker.internal:3000 -c zap-baseline.conf -r report.html
+                                -t http://host.docker.internal:8071 -c zap-baseline.conf -r report.html
                             '''
                         }
                     } finally {

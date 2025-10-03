@@ -1,4 +1,5 @@
-require("dotenv").config({ path: './.env' });
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 console.log('MONGO_URI from .env:', process.env.MONGO_URI);
 const express = require("express");
 const connectDB = require("./config/db");

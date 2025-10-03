@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
 
+const getCsrfToken = async () => {
+  try {
+    const response = await fetch('/api/csrf-token');
+    const data = await response.json();
+    return data.csrfToken;
+  } catch (error) {
+    console.error('Failed to get CSRF token:', error);
+    return null;
+  }
+};
+
 // You might want to create a proper service for API calls
 const addProduct = async (productData, token) => {
-  const response = await fetch('http://localhost:5000/api/products', {
+  const csrfToken = await getCsrfToken();
+  const response = await fetch('/api/products', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
+      'csrf-token': csrfToken,
     },
     body: JSON.stringify(productData),
   });

@@ -10,6 +10,20 @@ const getProducts = async (req, res) => {
   }
 };
 
+// GET product by ID
+const getProductById = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ message: "Product not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching product" });
+  }
+};
+
 // POST add product
 const addProduct = async (req, res) => {
   try {
@@ -22,4 +36,4 @@ const addProduct = async (req, res) => {
   }
 };
 
-module.exports = { getProducts, addProduct };
+module.exports = { getProducts, getProductById, addProduct };
