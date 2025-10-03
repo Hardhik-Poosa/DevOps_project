@@ -40,6 +40,14 @@ services:
       retries: 5
     networks:
       - devops-network
+
+  exporter:
+    image: nginx/nginx-prometheus-exporter
+    ports:
+      - '9113:9113'
+    command: -nginx.scrape-uri=http://frontend:8070/metrics
+    networks:
+      - devops-network
   
   prometheus:
     image: prom/prometheus:v2.44.0
@@ -48,6 +56,8 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
+    depends_on:
+      - exporter
     networks:
       - devops-network
 

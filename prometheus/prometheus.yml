@@ -12,4 +12,4 @@ alerting:
 scrape_configs:
   - job_name: 'nginx'
     static_configs:
-      - targets: ['nginx:8070']
+      - targets: ['exporter:9113']
